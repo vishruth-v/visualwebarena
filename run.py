@@ -140,13 +140,14 @@ def config() -> argparse.Namespace:
         "--captioning_model",
         type=str,
         default="Salesforce/blip2-flan-t5-xl",
-        choices=["Salesforce/blip2-flan-t5-xl", "llava-hf/llava-1.5-7b-hf"],
+        choices=["Salesforce/blip2-flan-t5-xl", "llava-hf/llava-1.5-7b-hf", 
+                 "HuggingFaceM4/idefics-9b-instruct", "HuggingFaceM4/idefics2-8b"],
         help="Captioning backbone for accessibility tree alt text.",
     )
 
     # lm config
-    parser.add_argument("--provider", type=str, default="openai")
-    parser.add_argument("--model", type=str, default="gpt-3.5-turbo-0613")
+    parser.add_argument("--provider", type=str, default="openai") # google, huggingface
+    parser.add_argument("--model", type=str, default="gpt-3.5-turbo-0613") # gemini---,
     parser.add_argument("--mode", type=str, default="chat")
     parser.add_argument("--temperature", type=float, default=1.0)
     parser.add_argument("--top_p", type=float, default=0.9)
@@ -164,6 +165,12 @@ def config() -> argparse.Namespace:
         type=int,
         help="when not zero, will truncate the observation to this length before feeding to the model",
         default=3840,
+    )
+    parser.add_argument(
+        "--model_endpoint",
+        type=str,
+        help="TGI server endpoint",
+        default="https://api-inference.huggingface.co/models/meta-llama/Meta-Llama-3-70B-Instruct", # LLama-3-70B
     )
 
     # example config
