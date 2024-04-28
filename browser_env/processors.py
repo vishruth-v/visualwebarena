@@ -697,6 +697,17 @@ class TextObervationProcessor(ObservationProcessor):
                     self.observation_type
                     == "accessibility_tree_with_captioner"
                 ):
+                    screenshot_bytes = page.screenshot()
+                    screenshot_img = Image.open(BytesIO(screenshot_bytes))
+                    screenshot_img_list = [screenshot_img] # List 
+                    
+                    web_screenshot_caption = self.captioning_fn(
+                        screenshot_img,
+                        prompt = "Give me {} of this webpage".format("description" if nl_caption else "HTML"),
+                        max_new_tokens=256
+                    )[0] # List of captions pick 1st one
+                    # TODO: See if this works
+
                     accessibility_tree = self.fetch_page_accessibility_tree(
                         browser_info, client
                     )
@@ -710,6 +721,9 @@ class TextObervationProcessor(ObservationProcessor):
                         accessibility_tree
                     )
                     content = self.clean_accesibility_tree(content)
+
+                    content = f"Screenshot/Visual Caption:\n{web_screenshot_caption}\n{content}" # Content is AcTree
+
                     self.obs_nodes_info = obs_nodes_info
                     self.meta_data["obs_nodes_info"] = obs_nodes_info
                 else:
