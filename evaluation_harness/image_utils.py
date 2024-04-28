@@ -6,6 +6,12 @@ from skimage.metrics import structural_similarity as ssim
 from transformers import (
     Blip2ForConditionalGeneration,
     Blip2Processor,
+    IdeficsForVisionText2Text, # For idefics
+    AutoModelForVision2Seq, # For idefics2
+    # Idefics2ForConditionalGeneration, # For idefics2
+    AutoProcessor,
+    # AutoModelForCausalLM # For llava
+    LlavaForConditionalGeneration # For llava
 )
 
 
@@ -15,6 +21,21 @@ def get_captioning_fn(
     if "blip2" in model_name:
         captioning_processor = Blip2Processor.from_pretrained(model_name)
         captioning_model = Blip2ForConditionalGeneration.from_pretrained(
+            model_name, torch_dtype=dtype
+        )
+    elif 'idefics2-8b' in model_name:
+        captioning_processor = AutoProcessor.from_pretrained(model_name)
+        captioning_model = AutoModelForVision2Seq.from_pretrained(
+            model_name, torch_dtype=dtype
+        )
+    elif 'idefics-9b' in model_name:
+        captioning_processor = AutoProcessor.from_pretrained(model_name)
+        captioning_model = IdeficsForVisionText2Text.from_pretrained(
+            model_name, torch_dtype=dtype
+        )
+    elif 'llava' in model_name:
+        captioning_processor = AutoProcessor.from_pretrained(model_name)
+        captioning_model = LlavaForConditionalGeneration.from_pretrained(
             model_name, torch_dtype=dtype
         )
     else:
