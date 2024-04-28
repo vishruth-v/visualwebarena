@@ -433,6 +433,7 @@ class MultimodalCoTPromptConstructor(CoTPromptConstructor):
                     f"Gemini models do not support mode {self.lm_config.mode}"
                 )
         else:
+            # TODO add support for IDEFCIS
             raise NotImplementedError(
                 f"Provider {self.lm_config.provider} not implemented"
             )

@@ -48,6 +48,8 @@ def pil_to_vertex(img: Image.Image) -> str:
         img_vertex = VertexImage.from_bytes(byte_data)
     return img_vertex
 
+# TODO add utils for pil to IDEFICS format
+
 
 class AccessibilityTreeNode(TypedDict):
     nodeId: str
