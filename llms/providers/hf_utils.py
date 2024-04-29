@@ -17,7 +17,7 @@ def generate_from_huggingface_completion(
         top_p=top_p,
         max_new_tokens=max_new_tokens,
         stop_sequences=stop_sequences,
-        truncate=8000 # 8k for llama3
+        truncate=4096 # 8k for llama3
     ).generated_text
 
     return generation
