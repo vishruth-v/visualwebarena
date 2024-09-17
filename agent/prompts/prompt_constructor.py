@@ -104,19 +104,12 @@ class PromptConstructor(object):
                 else:
                     raise ValueError("Only chat mode is supported for Llama-2")
             elif "Llama-3" in self.lm_config.model:
-                print('LLAMA3!')
                 if self.lm_config.mode == "chat":
-                    B_INST, E_INST = "<|start_header_id|>user<|end_header_id|>\n\n", "<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\n"
-                    B_SYS, E_SYS = "<|begin_of_text|><|start_header_id|>system<|end_header_id|>\n\n", "<|eot_id|>"
+                    B_INST, E_INST = "\n<|start_header_id|>user<|end_header_id|>\n\n", "<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\n"
+                    B_SYS, E_SYS = "<|start_header_id|>system<|end_header_id|>\n\n", "<|eot_id|>"
                     BOS, EOS = "<|begin_of_text|>", "<|eot_id|>"
-                    # adding the system message to be the starting of the first example
-                    examples = [
-                        (
-                            BOS + B_SYS + intro + E_SYS + examples[0][0],
-                            examples[0][1],
-                        )
-                    ] + examples[1:]
-                    message = "".join(
+
+                    message = BOS + B_SYS + intro + E_SYS + "".join(
                         [
                             f"{B_INST} {x.strip()} {E_INST} {y.strip()} {EOS}"
                             for (x, y) in examples
@@ -124,8 +117,6 @@ class PromptConstructor(object):
                     )
                     # add the current observation
                     message += f"{B_INST} {current.strip()} {E_INST} {self.instruction['meta_data'].get('force_prefix', '')}"
-
-                    print(message)
                     return message
                 else:
                     raise ValueError("Only chat mode is supported for Llama-3")
